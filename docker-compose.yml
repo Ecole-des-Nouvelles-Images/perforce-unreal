@@ -11,7 +11,7 @@ services:
       - P4NAME=perforceserver
       - P4USER=${P4_USER}
       - P4EMAIL=${P4_EMAIL}
-      - P4FULLNAME=${P4_FULLNAME}
+      - P4FULLNAME=${P4_FULL_NAME}
       - P4PASS=${P4_PASS}
     volumes:
       - serverdata:/metadata
