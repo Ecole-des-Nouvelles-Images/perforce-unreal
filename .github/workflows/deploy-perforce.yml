@@ -4,39 +4,39 @@ on:
   workflow_dispatch:
 
 env:
+  IMAGE_NAME: perforce-server
   DEPLOY_DIR: /srv/perforce
   COMPOSE_FILE: docker-compose.yml
 
 jobs:
-
   upload:
-    name: Upload Docker Compose file
+    name: Upload Files to Server
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Ensure docker-compose file is present
-        run: ls -la ${{ env.COMPOSE_FILE }}
-
-      - name: Upload docker-compose.yml to server
+      - name: Upload Docker Compose files
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ vars.SSH_HOST }}
           username: ${{ vars.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          source: "${{ env.COMPOSE_FILE }}"
-          target: "${{ env.DEPLOY_DIR }}"
+          source: |
+            docker-compose.yml
+            Dockerfile
+            docker-entrypoint.sh
+          target: ${{ env.DEPLOY_DIR }}
 
   deploy:
-    name: Deploy Perforce Stack
+    name: Deploy with Docker Compose
     runs-on: ubuntu-latest
     needs: upload
 
     steps:
-      - name: Run docker compose on server
+      - name: Launch container via SSH
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: ${{ vars.SSH_HOST }}
@@ -45,5 +45,7 @@ jobs:
           port: 22
           script: |
             cd ${{ env.DEPLOY_DIR }}
-            docker-compose -f ${{ env.COMPOSE_FILE }} down || true
-            docker-compose -f ${{ env.COMPOSE_FILE }} up -d
+            chmod +x docker-entrypoint.sh
+            docker-compose down || true
+            docker-compose build
+            docker-compose up -d
