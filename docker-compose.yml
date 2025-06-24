@@ -2,6 +2,7 @@ services:
   p4d:
     container_name: "p4d"
     build:
+      context: .
       dockerfile: Dockerfile
     restart: unless-stopped
     hostname: perforce
