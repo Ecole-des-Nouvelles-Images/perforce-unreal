@@ -1,22 +1,19 @@
-version: '3.9'
-
 services:
   p4d:
-    image: perforce/helix-core
+    image: perforce/helix-core:2025.1
     container_name: perforce-server
     ports:
       - "1666:1666"
     environment:
       - P4PORT=1666
       - P4USER=super
-      - P4ROOT=/perforce/depots
     volumes:
       - ./depot:/perforce/depots
       - ./metadata:/perforce/metadata
     restart: unless-stopped
 
   swarm:
-    image: perforce/helix-swarm
+    image: perforce/helix-swarm:2025.1
     container_name: perforce-swarm
     ports:
       - "8080:80"
