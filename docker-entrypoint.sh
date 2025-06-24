@@ -18,13 +18,13 @@ echo "[INFO] Trusting the server fingerprint..."
 echo yes | p4 trust
 
 # Create superuser if it doesn't exist
-if ! p4 users | grep -q "^fred "; then
-    echo "[INFO] Creating superuser 'fred'..."
-    echo -e "User: fred\nEmail: fred@localhost\nFullName: Fred Bast" | p4 user -i
+if ! p4 users | grep -q "^$P4USER "; then
+    echo "[INFO] Creating superuser '$P4USER'..."
+    echo -e "User: $P4USER\nEmail: $P4EMAIL\nFullName: $P4FULLNAME" | p4 user -i
     echo "[INFO] Setting password..."
-    echo -e "SuperPass123\nSuperPass123" | p4 passwd fred
+    echo -e "$P4PASS\n$P4PASS" | p4 passwd "$P4USER"
     echo "[INFO] Logging in..."
-    echo "SuperPass123" | p4 login fred
+    echo "$P4PASS" | p4 login "$P4USER"
 fi
 
 # Optional: enforce strong password policy
