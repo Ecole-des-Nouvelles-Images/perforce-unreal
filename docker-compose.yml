@@ -7,12 +7,12 @@ services:
     restart: unless-stopped
     hostname: perforce
     environment:
-      - P4PORT=ssl:1666
-      - P4NAME=perforceserver
-      - P4USER=${P4_USER}
-      - P4EMAIL=${P4_EMAIL}
-      - P4FULLNAME=${P4_FULL_NAME}
-      - P4PASS=${P4_PASS}
+      - P4_PORT=ssl:1666
+      - P4_NAME=perforceserver
+      - P4_USER=${P4_USER}
+      - P4_EMAIL=${P4_EMAIL}
+      - P4_FULL_NAME=${P4_FULL_NAME}
+      - P4_PASS=${P4_PASS}
     volumes:
       - serverdata:/metadata
       - serverlibrary:/library
