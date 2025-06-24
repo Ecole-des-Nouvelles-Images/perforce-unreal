@@ -1,0 +1,8 @@
+# Docker volumes
+depot/
+metadata/
+swarm/data/
+
+# Logs & env
+*.log
+.env
