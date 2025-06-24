@@ -40,7 +40,7 @@ jobs:
           username: ${{ vars.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          envs: P4USER,P4EMAIL,P4FULLNAME,P4PASS
+          envs: P4_USER,P4_EMAIL,P4_FULL_NAME,P4_PASS
           script: |
             cd ${{ env.DEPLOY_DIR }}
             chmod +x docker-entrypoint.sh
@@ -48,7 +48,7 @@ jobs:
             docker-compose build
             docker-compose up -d
         env:
-          P4USER: ${{ vars.P4USER }}
-          P4EMAIL: ${{ vars.P4EMAIL }}
-          P4FULLNAME: ${{ vars.P4FULLNAME }}
-          P4PASS: ${{ secrets.P4PASS }}
+          P4_USER: ${{ vars.P4_USER }}
+          P4_EMAIL: ${{ vars.P4_EMAIL }}
+          P4_FULL_NAME: ${{ vars.P4_FULL_NAME }}
+          P4_PASS: ${{ secrets.P4_PASS }}
