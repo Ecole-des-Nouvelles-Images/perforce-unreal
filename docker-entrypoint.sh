@@ -3,7 +3,7 @@
 # Init server if not already initialized
 if ! p4d -C1 -xD; then
     echo "[INFO] Initializing new P4D server..."
-    p4d -C1 -xD "$P4NAME"
+    p4d -C1 -xD "$P4_NAME"
     p4d -C1 -Gc
 fi
 
@@ -18,13 +18,13 @@ echo "[INFO] Trusting the server fingerprint..."
 echo yes | p4 trust
 
 # Create superuser if it doesn't exist
-if ! p4 users | grep -q "^$P4USER "; then
-    echo "[INFO] Creating superuser '$P4USER'..."
-    echo -e "User: $P4USER\nEmail: $P4EMAIL\nFullName: $P4FULLNAME" | p4 user -i
+if ! p4 users | grep -q "^$P4_USER "; then
+    echo "[INFO] Creating superuser '$P4_USER'..."
+    echo -e "User: $P4_USER\nEmail: $P4_EMAIL\nFullName: $P4_FULL_NAME" | p4 user -i
     echo "[INFO] Setting password..."
-    echo -e "$P4PASS\n$P4PASS" | p4 passwd "$P4USER"
+    echo -e "$P4_PASS\n$P4_PASS" | p4 passwd "$P4_USER"
     echo "[INFO] Logging in..."
-    echo "$P4PASS" | p4 login "$P4USER"
+    echo "$P4_PASS" | p4 login "$P4_USER"
 fi
 
 # Optional: enforce strong password policy
