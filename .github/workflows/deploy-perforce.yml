@@ -24,10 +24,7 @@ jobs:
           username: ${{ vars.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          source: |
-            docker-compose.yml
-            Dockerfile
-            docker-entrypoint.sh
+          source: "docker-compose.yml,Dockerfile,docker-entrypoint.sh"
           target: ${{ env.DEPLOY_DIR }}
 
   deploy:
