@@ -25,10 +25,10 @@ RUN chmod 700 /metadata /library /journals /backup /ssl
 
 USER $DOCKER_USER
 
-ENV P4_PORT=ssl:1666
-ENV P4_ROOT=/metadata
-ENV P4_NAME=myserver
-ENV P4_JOURNAL=/journals/journal
-ENV P4_SSL_DIR=/ssl
+ENV P4PORT=ssl:1666
+ENV P4ROOT=/metadata
+ENV P4NAME=myserver
+ENV P4JOURNAL=/journals/journal
+ENV P4SSLDIR=/ssl
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
