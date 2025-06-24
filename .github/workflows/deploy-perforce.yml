@@ -1,0 +1,77 @@
+name: Deploy Perforce Server
+
+on:
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: perforce-server
+  IMAGE_TAR: perforce-server.tar
+  DEPLOY_DIR: /srv/perforce
+  COMPOSE_FILE: docker-compose.yml
+
+jobs:
+
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Save Docker Compose context
+        run: docker-compose -f ${{ env.COMPOSE_FILE }} config
+
+      # Helix Core & Swarm use official images — no build required.
+      # Optional: if you had a custom image:
+      # - name: Build Docker image
+      #   run: docker build -t ${{ env.IMAGE_NAME }}:latest .
+
+  upload:
+    name: Upload Compose Files
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Upload docker-compose.yml
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ vars.SSH_HOST }}
+          username: ${{ vars.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "${{ env.COMPOSE_FILE }}"
+          target: "${{ env.DEPLOY_DIR }}"
+
+      - name: Upload README and other files (optional)
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ vars.SSH_HOST }}
+          username: ${{ vars.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: |
+            README.md
+            .gitignore
+          target: "${{ env.DEPLOY_DIR }}"
+
+  deploy:
+    name: Deploy via SSH
+    runs-on: ubuntu-latest
+    needs: upload
+
+    steps:
+      - name: Launch docker-compose
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ vars.SSH_HOST }}
+          username: ${{ vars.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd ${{ env.DEPLOY_DIR }}
+            docker-compose -f ${{ env.COMPOSE_FILE }} down || true
+            docker-compose -f ${{ env.COMPOSE_FILE }} up -d
