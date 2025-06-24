@@ -9,10 +9,10 @@ services:
     environment:
       - P4PORT=ssl:1666
       - P4NAME=perforceserver
-      - P4USER=${P4USER}
-      - P4EMAIL=${P4EMAIL}
-      - P4FULLNAME=${P4FULLNAME}
-      - P4PASS=${P4PASS}
+      - P4USER=${P4_USER}
+      - P4EMAIL=${P4_EMAIL}
+      - P4FULLNAME=${P4_FULLNAME}
+      - P4PASS=${P4_PASS}
     volumes:
       - serverdata:/metadata
       - serverlibrary:/library
