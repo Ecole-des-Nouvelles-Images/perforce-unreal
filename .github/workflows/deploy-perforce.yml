@@ -45,5 +45,5 @@ jobs:
           port: 22
           script: |
             cd ${{ env.DEPLOY_DIR }}
-            docker compose -f ${{ env.COMPOSE_FILE }} down || true
-            docker compose -f ${{ env.COMPOSE_FILE }} up -d
+            docker-compose -f ${{ env.COMPOSE_FILE }} down || true
+            docker-compose -f ${{ env.COMPOSE_FILE }} up -d
